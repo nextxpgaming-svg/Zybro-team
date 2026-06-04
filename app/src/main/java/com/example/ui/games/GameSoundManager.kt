@@ -71,40 +71,60 @@ object GameSoundManager {
     }
 
     fun playSuccess() {
-        playBeep(523.25f, 100) // C5
-        Thread.sleep(120)
-        playBeep(659.25f, 100) // E5
-        Thread.sleep(120)
-        playBeep(783.99f, 250) // G5
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                playBeep(523.25f, 100) // C5
+                Thread.sleep(120)
+                playBeep(659.25f, 100) // E5
+                Thread.sleep(120)
+                playBeep(783.99f, 250) // G5
+            } catch (e: Exception) {
+                // Squelch background thread sleep interrupts
+            }
+        }
     }
 
     fun playGameOver() {
-        playBeep(392f, 150) // G4
-        Thread.sleep(180)
-        playBeep(349.23f, 150) // F4
-        Thread.sleep(180)
-        playBeep(261.63f, 400) // C4
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                playBeep(392f, 150) // G4
+                Thread.sleep(180)
+                playBeep(349.23f, 150) // F4
+                Thread.sleep(180)
+                playBeep(261.63f, 400) // C4
+            } catch (e: Exception) {
+                // Squelch background thread sleep interrupts
+            }
+        }
     }
 
     fun triggerHaptic(context: Context) {
         if (!isVibrationEnabled) return
-        val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator ?: return
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibrator.vibrate(VibrationEffect.createOneShot(30, VibrationEffect.DEFAULT_AMPLITUDE))
-        } else {
-            @Suppress("DEPRECATION")
-            vibrator.vibrate(30)
+        try {
+            val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator ?: return
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                vibrator.vibrate(VibrationEffect.createOneShot(30, VibrationEffect.DEFAULT_AMPLITUDE))
+            } else {
+                @Suppress("DEPRECATION")
+                vibrator.vibrate(30)
+            }
+        } catch (e: Exception) {
+            // Squelch any lack of permissions or security policies
         }
     }
 
     fun triggerStrongHaptic(context: Context) {
         if (!isVibrationEnabled) return
-        val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator ?: return
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibrator.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE))
-        } else {
-            @Suppress("DEPRECATION")
-            vibrator.vibrate(100)
+        try {
+            val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator ?: return
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                vibrator.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE))
+            } else {
+                @Suppress("DEPRECATION")
+                vibrator.vibrate(100)
+            }
+        } catch (e: Exception) {
+            // Squelch any lack of permissions or security policies
         }
     }
 }
