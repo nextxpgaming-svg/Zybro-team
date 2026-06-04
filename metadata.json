@@ -1,0 +1,6 @@
+{
+  "name": "GameVault 100+",
+  "description": "A high-quality offline gaming hub containing 100+ mini-games with local progress, favorites, stats, leaderboards, and an XP level system, by Zybro Studios.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
